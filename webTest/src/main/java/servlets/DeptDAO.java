@@ -22,7 +22,3 @@ public interface DeptDAO {
 	List<Dept> getAll();
  
 }
-
-
-
-

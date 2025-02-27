@@ -33,15 +33,15 @@ public class DatabaseConfigLis implements ServletContextListener {
             properties.load(input);
 //            System.out.println(properties.get);
             // Retrieve and set database connection properties in ServletContext
-            context.setAttribute("db.url", properties.getProperty("jdbc.url"));
-            context.setAttribute("db.username", properties.getProperty("jdbc.username"));
-            context.setAttribute("db.password", properties.getProperty("jdbc.password"));
-            context.setAttribute("db.driver", properties.getProperty("jdbc.driver"));
+            context.setAttribute("url", properties.getProperty("jdbc.url"));
+            context.setAttribute("username", properties.getProperty("jdbc.username"));
+            context.setAttribute("password", properties.getProperty("jdbc.password"));
+            context.setAttribute("driver", properties.getProperty("jdbc.driver"));
 
-            System.out.println("Database connection properties loaded into ServletContext."+context.getAttribute("db.password"));
+            System.out.println("Database connection properties loaded into ServletContext."+context.getAttribute("password"));
             
             try {
-        			Class.forName((String)context.getAttribute("db.driver"));
+        			Class.forName((String)context.getAttribute("driver"));
         		} catch (ClassNotFoundException e) {
         			e.printStackTrace();// TODO: handle exception
         		}

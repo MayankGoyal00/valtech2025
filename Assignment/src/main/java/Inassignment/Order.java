@@ -2,22 +2,43 @@ package Inassignment;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Order {
 
-	@Id@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "order_seq")
-	@SequenceGenerator(name = "order_seq", sequenceName = "order_seq", allocationSize = 1)
-	private int id;
-	private int customer_id;///////
-	@OneToMany(mappedBy = "order")
-	private Set<LineItem> lineItems;
+	public enum order_status{
+		DELIVERED,PENDING,PROCESSING;
+	}
+	@Id
+	private long id;
+	private String get_line_item;
+	private order_status order_status;
+	
+	
+	@ManyToOne()
+	private Set<LineItem> lineorderitem; 
+	
+	public void setLineorderitem(Set<LineItem> lineorderitem) {
+		this.lineorderitem = lineorderitem;
+	}
+	
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,targetEntity = Customer.class)
+	@JoinColumn(name="cust_id",referencedColumnName = "cust_id")
+	private Customer customer;
+	
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 	
 	
 	public Order() {}
@@ -31,10 +52,10 @@ public class Order {
 	}
 
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public int getCustomer_id() {

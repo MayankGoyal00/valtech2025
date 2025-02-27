@@ -1,9 +1,11 @@
 package Inassignment;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -16,6 +18,18 @@ public class Customer {
 	private int age;
 	private String address; 
 	private String p_address;
+	
+	@OneToMany(targetEntity = Order.class,fetch = FetchType.LAZY, mappedBy = "customer")
+	private Set<Order> order;
+	
+	public Set<Order> getOrder(){
+		return order;
+	}
+	
+	public void setOrder(Set<Order> order) {
+		this.order=order;
+	}
+	
 	
 	
 	public Customer() {}

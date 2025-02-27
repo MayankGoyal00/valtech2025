@@ -2,15 +2,15 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
   <display-name>webTest</display-name>
   
-<!--   <listener>
+ <!--  <listener>
   	<listener-class>servlets.LoadConfigListener</listener-class>
   
-  </listener> -->
+  </listener>  -->
   
    <listener>
        <listener-class>servlets.DatabaseConfigLis</listener-class>
    </listener>
-  
+ 
   
    <filter>
   	<filter-name>log</filter-name>

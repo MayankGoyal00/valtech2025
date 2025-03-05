@@ -1,10 +1,14 @@
 package Inassignment;
-
 import java.util.List;
+import java.util.Set;
 
 public interface CustomerDAO {
-	void addCustomer(Customer customer);
-    void removeCustomer(long id);
-    Customer getCustomerById(long id);
-    List<Customer> getAllCustomers();
+    void save(Customer customer); 
+    void update(Customer c);
+    void delete(Long customerId);   
+    Customer get(Long customerId);  
+    Set<Customer> findAll();
+	
 }
+
+

@@ -1,49 +1,50 @@
 package Inassignment;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
 import java.util.List;
-//import dao.OrderDAO;////
-//import dao.impl.OrderDAOImpl;////
+import java.util.Set;
 
-public class OrderServiceImpl implements OrderService {
-
+public class OrderServiceImpl implements OrderDAO {
+	
 	private OrderDAO orderDAO;
-	
-	public OrderServiceImpl(OrderDAO orderDAO) {
-        this.orderDAO = orderDAO;
+    public void setOrderDAO(OrderDAO orderDAO) {
+		this.orderDAO = orderDAO;
+	} 
+  
+    @Override
+    public void save(Orders o) {
+    	orderDAO.save(o);
+    	
     }
+    
+    @Override
+    public void update(Orders oo) {
+    	orderDAO.update(oo);
+    	
+    }
+
+	@Override
+	public void delete(Long orderId) {
+		orderDAO.delete(orderId);		
+	}
+
+	@Override
+	public Orders get(Long orderId) {
+		return orderDAO.get(orderId);	
+		
+	}
+    
+	@Override
+	public Set<Orders> findAll() {
+		return orderDAO.findAll();
 	
-	@Override
-	public void placeOrder(Order order) {
-		orderDAO.placeOrder(order);
-
 	}
 
-	@Override
-	public void checkOrderStatus(long orderId) {
-		orderDAO.checkOrderStatus(orderId);
-	}
-
-	@Override
-	public void reorderItem(long Id) {
-		orderDAO.reorderItem(orderId);
-
-	}
-
-	@Override
-	public void addOrder(Order order) {
-		orderDAO.addOrder(order);
-
-	}
-
-	@Override
-	public void removeOrder(long orderId) {
-		orderDAO.removeOrder(orderId);
-
-	}
-
-	@Override
-	public List<Order> getAllOrders() {
-		return orderDAO.getAllOrders();
-	}
+	
+    
 
 }

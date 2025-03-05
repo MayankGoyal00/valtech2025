@@ -1,12 +1,13 @@
 package Inassignment;
-
 import java.util.List;
+import java.util.Set;
 
 public interface OrderDAO {
-	 void placeOrder(Order order);
-	 void checkOrderStatus(long orderId);
-	 void reorderItem(long orderId);
-     void addOrder(Order order);
-     void removeOrder(long orderId);
-	 List<Order> getAllOrders();
+    void save(Orders o); 
+    void update(Orders oo);
+    void delete(Long orderId);   
+    Orders get(Long orderId);  
+    Set<Orders> findAll();
+	
+	
 }

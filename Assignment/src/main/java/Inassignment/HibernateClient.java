@@ -1,77 +1,129 @@
 package Inassignment;
 
-import org.hibernate.Transaction;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
-
-import java.util.List;
-import Inassignment.Item;
-import Inassignment.Order;
-import Inassignment.Customer;
-import Inassignment.LineItem;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class HibernateClient {
-	//private static final SessionFactory sessionFactory;
+    public static void main(String[] args) {
+    	
+ 
+    	ClassPathXmlApplicationContext ctx= new ClassPathXmlApplicationContext("hibernate.xml");//spring
+    	CustomerService cs= ctx.getBean(CustomerServiceImpl.class);
+    	CustomerDAO csh=ctx.getBean(CustomerDAOImpl.class);
+    	OrderDAO oh= ctx.getBean(OrderDAOImpl.class);
+    	ItemDAO idao= ctx.getBean(ItemDAOImpl.class);
+    	
 
-    static {
-        try {
-        		SessionFactory sesFac=new AnnotationConfiguration()
-           // sessionFactory = new Configuration().configure("hibernate.cfg.xml")   ///
-                .addAnnotatedClass(Inassignment.Item.class)
-                .addAnnotatedClass(Inassignment.Order.class)
-                .addAnnotatedClass(Inassignment.Customer.class)
-                .addAnnotatedClass(Inassignment.LineItem.class)
-                .buildSessionFactory();
-        } catch (Throwable ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
+//    	csh.delete(1l);
+//   	csh.delete(2l);
+//    	csh.delete(3l);
+    	
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    	
+    	
+    	
+ //   	Item i = new Item("bottle","sports",10,2,20);
+//    	Item i=new Item();
+//    	i.setName("Ball");
+//    	i.setDescription("Tennis");
+//    	i.setCurrentQuantity(20);
+//    	i.setReorderQuantity(10);
+//    	i.setMaxQuantity(40);
+ //   	idao.save(i);
+    	
+    	Item i2=new Item();
+    	i2.setName("gloves");
+    	i2.setDescription("Golf");
+    	i2.setCurrentQuantity(30);
+    	i2.setReorderQuantity(20);
+    	i2.setMaxQuantity(50);
+ //   	idao.save(i2);
+    	
+//    	Item i3=new Item();
+//    	i3.setName("ball");
+//    	i3.setDescription("football");
+//    	i3.setCurrentQuantity(150);
+//    	i3.setReorderQuantity(50);
+//    	i3.setMaxQuantity(300);
+//    	idao.save(i3);
+    	
+    	
+    	
+    	
+    	
+ //   	Customer c1=new Customer("Mayank",23,"Gujarat","Rajasthan");
+ //   	csh.save(c1);
+ //   	Customer c2=new Customer("Mitul",22,"Kolkata","Gujarat");
+ //   	csh.save(c2);
+    	Customer c3=new Customer("Abishek",20,"Punjab","Uttrakhand");
+    	csh.save(c3);
+//    	Customer c4=new Customer("Rahul",32,"Himchal","Rajasthan");
+//    	csh.save(c4);
+//    	Customer c5=new Customer("Virat",30,"Delhi","Haryana");
+//    	csh.save(c5);
+    	
+    	
+    	
+    	
+    	
+    	
+    	Orders ob= new Orders();
+    	ob.addOrderItems(new OrderItem(i2,ob,90));
+    	ob.setCustomer(c3);
+    	ob.setOrderStatus("PACKed");
+    	oh.save(ob);
+    	
+    	
+    	
+   	
+    	
+//    	Orders ob= new Orders();
+//    	ob.addOrderItems(new OrderItem(i3,ob,990));
+//    	oh.save(ob);
+    	
+//
+    	
+    	Orders ob2= new Orders();
+    	ob2.addOrderItems(new OrderItem(i2,ob,900));
+    	oh.save(ob2);
+    	
+    	
+    	
+    	
+    	
+    	
+//    	OrderItem oi= new OrderItem();
+//    	oi.setItem(is.get(3));
+//    	oi.setQuantity(25);
+//    	
+//    	OrderItem oi2= new OrderItem();
+//    	oi.setItem(is.get(2));
+//    	oi.setQuantity(50);
+	
+    			
+//    	Customer c=new Customer("Abdul",33,"Haryana","Punjab");
+//    	ob.addOrderItems(new OrderItem(i3,ob,190));
+//    	Set<Orders>orders=new HashSet<Orders>();
+//    	ob.setCustomer(c4);
+//    	ob.setOrderStatus("Complete");
+//    	c.setOrders(orders);
+//    	orders.add(ob);
+//    	csh.save(c);
+//    	oh.save(ob);
+
+
+
+//    	Item i=new Item("bat","sports",4,4,8);
+//  	i.setOrderItems(new HashSet<OrderItem>("ball","sports",4,4,8));
+//    	idao.save(i);
+//    	
+
+    	
+    	ctx.close();
+
     }
 }
-//
-//
-//package Inassignment;
-//
-//public class OrderManagementSystem {
-//	public static void main(String[] args) {
-//        // Initialize DAOs and Services
-//        InventoryDAO inventoryDAO = new InventoryDAOImpl();
-//        OrderDAO orderDAO = new OrderDAOImpl();
-//        CustomerDAO customerDAO = new CustomerDAOImpl();
-//
-//        InventoryService inventoryService = new InventoryServiceImpl(inventoryDAO);
-//        OrderService orderService = new OrderServiceImpl(orderDAO);
-//        CustomerService customerService = new CustomerServiceImpl(customerDAO);
-//
-//        // Example Operations
-//        Item newItem = new Item();
-//        newItem.setName("Laptop");
-//        newItem.setDescription("Gaming Laptop");
-//        newItem.setQuantity(50);
-//        newItem.setReorder_level(10);
-//        newItem.setMax_quantity(100);
-//        inventoryService.addItem(newItem);
-//
-//        Customer customer = new Customer();
-//        customer.setName("John Doe");
-//        customer.setAge(25);
-//        customer.setAddress("123 Main St");
-//        customer.setP_address("456 Elm St");
-//        customerService.addCustomer(customer);
-//
-//        Order order = new Order();
-//        order.setCustomerId(customer.getId());//setCustomer_id
-//        orderService.placeOrder(order);
-//    }
-//}
-//
-//
-//
-//
-//

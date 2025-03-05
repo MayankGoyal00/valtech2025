@@ -1,49 +1,54 @@
 package Inassignment;
 
-import java.util.List;
-
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import java.util.List;
+import java.util.Set;
 
 public class CustomerDAOImpl implements CustomerDAO {
+	
+    private SessionFactory sessionFactory;  
+    public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 
-	@Override
-	public void addCustomer(Customer customer) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(customer);
-        transaction.commit();
-        session.close();
-
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public void removeCustomer(long id) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Customer customer = session.get(Customer.class, id);
-        if (customer != null) {
-            session.delete(customer);
-        }
-        transaction.commit();
-        session.close();
+    public void save(Customer c) {
+    	new HibernateTemplate(sessionFactory).save(c);
+    	
+    }
+    
+    @Override
+    public void update(Customer c) {
+    	new HibernateTemplate(sessionFactory).update(c);
+    	
+    }
 
+	@Override
+	public void delete(Long customerId) {
+		new HibernateTemplate(sessionFactory).delete(get(customerId));		
 	}
 
 	@Override
-	public Customer getCustomerById(long id) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Customer customer = session.get(Customer.class, id);
-        session.close();
-        return customer;
+	public Customer get(Long customerId) {
+		return new HibernateTemplate(sessionFactory).load(Customer.class, customerId);	
+		
+	}
+    
+	@Override
+	public Set<Customer> findAll() {
+		return (Set<Customer>) new HibernateTemplate(sessionFactory).find("Customer c");
+	
 	}
 
-	@Override
-	public List<Customer> getAllCustomers() {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        List<Customer> customers = session.createQuery("from Customer", Customer.class).list();
-        session.close();
-        return customers;
-	}
+	
+    
 
 }

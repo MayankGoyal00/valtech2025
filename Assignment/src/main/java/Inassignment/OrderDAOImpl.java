@@ -1,65 +1,51 @@
 package Inassignment;
 
-import java.util.List;
-
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import java.util.List;
+import java.util.Set;
 
 public class OrderDAOImpl implements OrderDAO {
+	
+    private SessionFactory sessionFactory;  
+    public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 
-	@Override
-	public void placeOrder(Order order) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(order);
-        transaction.commit();
-        session.close();
-
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public void checkOrderStatus(long orderId) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Order order = session.get(Order.class, orderId);
-        System.out.println(order);
-        session.close();
+    public void save(Orders o) {
+    	new HibernateTemplate(sessionFactory).save(o);
+    	
+    }
+    
+    @Override
+    public void update(Orders oo) {
+    	new HibernateTemplate(sessionFactory).update(oo);
+    	
+    }
 
+	@Override
+	public void delete(Long orderId) {
+		new HibernateTemplate(sessionFactory).delete(get(orderId));		
 	}
 
 	@Override
-	public void reorderItem(long orderId) {
-		// TODO Auto-generated method stub
-
+	public Orders get(Long orderId) {
+		return new HibernateTemplate(sessionFactory).load(Orders.class, orderId);	
+		
 	}
-
+    
 	@Override
-	public void addOrder(Order order) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(order);
-        transaction.commit();
-        session.close();
-	}
-
-	@Override
-	public void removeOrder(long orderId) {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Order order = session.get(Order.class, orderId);
-        if (order != null) {
-            session.delete(order);
-        }
-        transaction.commit();
-        session.close();
-
-	}
-
-	@Override
-	public List<Order> getAllOrders() {
-		Session session = HibernateClient.getSessionFactory().openSession();
-        List<Order> orders = session.createQuery("from Order", Order.class).list();
-        session.close();
-        return orders;
+	public Set<Orders> findAll() {
+		return (Set<Orders>) new HibernateTemplate(sessionFactory).find("Order o");
+	
 	}
 
 }

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Employee Table</title>
 </head>
 <body>
 <form action= "employees" method="get">
@@ -24,13 +24,33 @@
 			<option value="level">Search by Level</option>			
 		</select>
 		<input type="text" name="searchV"  placeholder="Enter Value.."/>
-<!-- 		<input type="text" name="searchV" required="required" placeholder="Enter Value.."/>
--->		
-		<select name="salarySort">
+
+		<select name="sortCondition">
 			<option value="<">LESS THAN</option>	
 			<option value="=">EQUAL</option>	
 			<option value=">">GREATER THAN</option>
 		</select>
+		
+		<%--<select name="experienceSort">
+    		<option value="<">LESS THAN</option>
+    		<option value="=">EQUAL</option>
+    		<option value=">">GREATER THAN</option>
+		</select>
+		
+		
+		 <select name="salarySort">
+			<option value="<">LESS THAN</option>	
+			<option value="=">EQUAL</option>	
+			<option value=">">GREATER THAN</option>
+		</select>
+		
+		<select name="levelSort">
+        	<option value="<">LESS THAN</option>   
+        	<option value="=">EQUAL</option>   
+        	<option value=">">GREATER THAN</option>
+   	 	</select> --%>
+		
+		
 		<button type="submit">Search</button>
 		<button type="submit" name="show" value="getAll">Show All</button>
 <table>

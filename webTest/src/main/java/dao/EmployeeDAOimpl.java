@@ -11,29 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-//import day4.Employee;
 
 public class EmployeeDAOimpl implements EmployeeDAO{
-	
-//	private Connection getConnection() throws SQLException{
-//		return DriverManager.getConnection("jdbc:postgresql://localhost:5432/training","postgres","postgres");
-//	}
-//	
+		
 	public EmployeeDAOimpl(ServletContext sce,Properties p){
         this.sce = sce;
         this.p=p;
     }
 	
-	
-	
 	private ServletContext sce;
 	private Properties p;
-	
 	
 	public ServletContext getSce() {
 		return sce;
 	}
-
 
 	public void setSce(ServletContext sce) {
 		this.sce = sce;
@@ -50,9 +41,7 @@ public class EmployeeDAOimpl implements EmployeeDAO{
 //		return DriverManager.getConnection((String)sce.getAttribute("db.url"), p);
 	}
 	
-	
-	
-	
+
 	@Override
 	public List<Employee> searchByName(String name) {
 		List<Employee> emp = new ArrayList<Employee>();
@@ -77,9 +66,9 @@ public class EmployeeDAOimpl implements EmployeeDAO{
 	
 	
 	@Override
-	public List<Employee> searchByAge(int age) {
+	public List<Employee> searchByAge(int age, String condition) {
 		List<Employee> emp = new ArrayList<Employee>();
-		String sql = "SELECT ID,NAME,AGE,GENDER,SALARY,EXPERIENCE,LEVEL FROM EMPLOYEE WHERE AGE =?";
+		String sql = "SELECT ID,NAME,AGE,GENDER,SALARY,EXPERIENCE,LEVEL FROM EMPLOYEE WHERE AGE  " + condition + " ?";
 		try(Connection conn = getConnection()){
 			PreparedStatement ps = conn.prepareStatement(sql);
 			//System.out.println(name);
@@ -150,9 +139,9 @@ public class EmployeeDAOimpl implements EmployeeDAO{
 	
  
 	@Override
-	public List<Employee> searchByLevel(int level) {
+	public List<Employee> searchByLevel(int level, String condition) {
 		List<Employee> emp = new ArrayList<Employee>();
-		String sql = "SELECT ID,NAME,AGE,GENDER,SALARY,EXPERIENCE,LEVEL FROM EMPLOYEE WHERE LEVEL =?";
+		String sql = "SELECT ID,NAME,AGE,GENDER,SALARY,EXPERIENCE,LEVEL FROM EMPLOYEE WHERE LEVEL "+ condition + " ?";
 		try(Connection conn = getConnection()){
 			PreparedStatement ps = conn.prepareStatement(sql);
 			//System.out.println(name);
@@ -175,9 +164,9 @@ public class EmployeeDAOimpl implements EmployeeDAO{
 	
  
 	@Override
-	public List<Employee> searchByExperience(int ex) {
+	public List<Employee> searchByExperience(int ex, String condition) {
 		List<Employee> emp = new ArrayList<Employee>();
-		String sql = "SELECT ID,NAME,AGE,GENDER,SALARY,EXPERIENCE,LEVEL FROM EMPLOYEE WHERE EXPERIENCE =?";
+		String sql = "SELECT ID,NAME,AGE,GENDER,SALARY,EXPERIENCE,LEVEL FROM EMPLOYEE WHERE EXPERIENCE "+ condition + " ?";
 		try(Connection conn = getConnection()){
 			PreparedStatement ps = conn.prepareStatement(sql);
 			//System.out.println(name);

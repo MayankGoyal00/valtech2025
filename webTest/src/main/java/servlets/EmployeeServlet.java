@@ -1,13 +1,16 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import dao.Employee;
 import dao.EmployeeDAO;
 import dao.EmployeeDAOimpl;
-import jakarta.servlet.ServletConfig; 
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,9 +22,22 @@ import jakarta.servlet.http.HttpSession;
 public class EmployeeServlet extends HttpServlet{
 	
 	private EmployeeDAO dao;
+
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-		dao= (EmployeeDAO)config.getServletContext().getAttribute("emp");
+	public void init() throws ServletException {
+	    ServletContext context = getServletContext();
+	    Properties properties = new Properties();
+	    try (InputStream input = context.getResourceAsStream("/WEB-INF/classes/db.properties")) {
+	        if (input != null) {
+	            properties.load(input);
+	        } else {
+	            throw new ServletException("Could not load properties file.");
+	        }
+	    } catch (IOException e) {
+	        throw new ServletException("Error loading properties", e);
+	    }
+ 
+	    dao = new EmployeeDAOimpl(context, properties);
 	}
 	
 	
@@ -78,30 +94,52 @@ public class EmployeeServlet extends HttpServlet{
 			if("search".equals(operation)) {
 			
 			String searchType = req.getParameter("searchType");
+			String searchValue = req.getParameter("searchV");
+	        String sortCondition = req.getParameter("sortCondition");
+	   
+	        
+			
 			List<Employee> emp1=new ArrayList<>();
 			
 			if("name".equals(searchType)) {
 				String name = req.getParameter("searchV");
                 emp1 = dao.searchByName(name);
+                
+                
 			}else if("ID".equals(searchType)) {
 				int id = Integer.parseInt(req.getParameter("searchV"));
 				emp1=dao.searchById(id);
+				
+				
+				
 			}else if("age".equals(searchType)) {
 				int age = Integer.parseInt(req.getParameter("searchV"));
-				emp1=dao.searchByAge(age);
+				String condition = req.getParameter("AgeSort");
+				emp1=dao.searchByAge(age,sortCondition);
+				
+				
+				
 			}else if("gender".equals(searchType)) {
 				String gender = req.getParameter("searchV");
 				emp1=dao.searchByGender(gender);
+				
+				
 			}else if("salary".equals(searchType)) {
 				float salary = Float.parseFloat(req.getParameter("searchV"));
-				String condi = req.getParameter("salarySort");
-				emp1=dao.searchBySalary(salary,condi);
+				String condition = req.getParameter("salarySort");
+				emp1=dao.searchBySalary(salary,sortCondition);
+				
+				
 			}else if("level".equals(searchType)) {
 				int level = Integer.parseInt(req.getParameter("searchV"));
-				emp1=dao.searchByLevel(level);
+				String condition = req.getParameter("levelSort");
+				emp1=dao.searchByLevel(level,sortCondition);
+				
+			
 			}else if("experience".equals(searchType)) {
 				int experience = Integer.parseInt(req.getParameter("searchV"));
-				emp1=dao.searchByExperience(experience);
+				String condition = req.getParameter("experienceSort");
+				emp1=dao.searchByExperience(experience, sortCondition);
 			}else
 			{
 				emp1=dao.getAll();

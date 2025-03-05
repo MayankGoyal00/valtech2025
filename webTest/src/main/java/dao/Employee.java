@@ -18,13 +18,9 @@ public class Employee implements Comparable<Employee>{
 	private Gender gender;		//enum 
 	public static List<Employee> allEmp = new ArrayList<Employee>();
 	public static Map<Gender,List<Employee>> getEmployeeMap = new HashMap<Gender,List<Employee>>();
-	 
-	
-	
+
 	public Employee() {
 	}
-	
-	
 
 	public Employee(long id, String name, int age, float salary, int level, int experience, Gender gender) {
 		this.id = id;
@@ -35,35 +31,23 @@ public class Employee implements Comparable<Employee>{
 		this.experience = experience;
 		this.gender = gender;
 	}
-	
-	
-	
-	
+
 	public static Map<Gender,List<Employee>> getemployeebygender(){
 		return allEmp.stream().collect(Collectors.groupingBy(e->e.gender));
 	}
-	
-	
-	
-	
+
 	public static double getemployeebylevel(int level) {
 		List<Employee> emp= allEmp.stream().filter(e->e.level==level).collect(Collectors.toList());
 		System.out.println(emp);
 		return allEmp.stream().filter(e->e.level==level).mapToDouble(Employee::getSalary).sum();
 	}
-	
 
-	
-	
 	public static double getemployeebygender(Gender gender) {
 		List<Employee> emp= allEmp.stream().filter(e->e.gender.equals(gender)).collect(Collectors.toList());
 		System.out.println(emp);
 		return allEmp.stream().filter(e->e.gender.equals(gender)).mapToDouble(Employee::getSalary).sum();
 	}
-	
-	
-	
-	
+
 	public static String getemployeebyname(String name) {
 		List<Employee> emp= allEmp.stream().filter(e->e.name.equals(name)).collect(Collectors.toList());
 		System.out.println(emp);
@@ -75,10 +59,7 @@ public class Employee implements Comparable<Employee>{
 			return "Not available "+name;
 		}
 	}
-	
-	
-	
-	
+
 	public static double getemployeebygenderlevel(int level, Gender gender) {
 		List<Employee> emp= allEmp.stream().filter(e->e.gender.equals(gender) && e.level==level).collect(Collectors.toList());
 		System.out.println(emp);
@@ -153,10 +134,7 @@ public class Employee implements Comparable<Employee>{
 		this.gender = gender;
 	}
 
-	
-	
-	
-	
+
 	
 	@Override
 	public String toString() {
@@ -164,8 +142,7 @@ public class Employee implements Comparable<Employee>{
 				+ ", experience=" + experience + " Gender="+gender;
 	}
 
-	
-	
+
 	
 	@Override
 	public int hashCode() {
@@ -189,9 +166,7 @@ public class Employee implements Comparable<Employee>{
 	}
 	
 	
-	
-	
-	
+
 
 	public static EmployeeBuilder builder() {
 		
@@ -253,14 +228,6 @@ public class Employee implements Comparable<Employee>{
 			return experience-o.experience;
 		int genderComparable = this.gender.compareTo(o.gender);
 		if(genderComparable != 0) return genderComparable;
-		
-//		else if(this.gender.equals("Male") )
-//			return 1;
-//		else if(this.gender.equals("Female") )
-//			return -1;
-//		else if(this.gender.equals("Other") )
-//			return 0;
-		else 
 			return (int) (salary-o.salary); 
 		
 	}

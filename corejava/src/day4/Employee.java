@@ -33,52 +33,12 @@ public class Employee implements Comparable<Employee>{
 	}
 	
 	
-	public static Map<Gender,List<Employee>> getemployeebygender(){
-		return allEmp.stream().collect(Collectors.groupingBy(e->e.gender));
-	}
-	
-	
-	public static double getemployeebylevel(int level) {
-		List<Employee> emp= allEmp.stream().filter(e->e.level==level).collect(Collectors.toList());
-		System.out.println(emp);
-		return allEmp.stream().filter(e->e.level==level).mapToDouble(Employee::getSalary).sum();
-	}
-	
 
-	public static double getemployeebygender(Gender gender) {
-		List<Employee> emp= allEmp.stream().filter(e->e.gender.equals(gender)).collect(Collectors.toList());
-		System.out.println(emp);
-		return allEmp.stream().filter(e->e.gender.equals(gender)).mapToDouble(Employee::getSalary).sum();
-	}
-	
-	
-	public static String getemployeebyname(String name) {
-		List<Employee> emp= allEmp.stream().filter(e->e.name.equals(name)).collect(Collectors.toList());
-		System.out.println(emp);
-		double emp1= allEmp.stream().filter(e->e.name.equals(name)).mapToDouble(Employee::getSalary).sum();
-		if(emp1>0) {
-			return "Total = "+emp1;
-		}
-		else {
-			return "Not available "+name;
-		}
-	}
-	
-	
-	public static double getemployeebygenderlevel(int level, Gender gender) {
-		List<Employee> emp= allEmp.stream().filter(e->e.gender.equals(gender) && e.level==level).collect(Collectors.toList());
-		System.out.println(emp);
-		return allEmp.stream().filter(e->e.gender.equals(gender) && e.level==level).mapToDouble(Employee::getSalary).sum();
-	}
-	
 	
 	public enum Gender {
 
 		MALE, FEMALE, OTHER;
 	}
-	
-
-	
 
 
 	public long getId() {
@@ -138,10 +98,6 @@ public class Employee implements Comparable<Employee>{
 	}
 
 	
-	
-	
-	
-	
 	@Override
 	public String toString() {
 		return "Employee id=" + id + ", name=" + name + ", age=" + age + ", salary=" + salary + ", level=" + level
@@ -169,10 +125,6 @@ public class Employee implements Comparable<Employee>{
 	}
 	
 	
-	
-	
-	
-
 	public static EmployeeBuilder builder() {
 		
 		EmployeeBuilder empb=new EmployeeBuilder(new Employee());
@@ -214,34 +166,24 @@ public class Employee implements Comparable<Employee>{
 			return this;
 		}
 		public EmployeeBuilder gender(String gender) {
-			//employee.setGender(gender);
 			employee.setGender(Gender.valueOf(gender));
 			return this;
 		}
 		
 	}
 
-	//Gender.valueOf(rs.getString(4));
-	
-	
 	
 	@Override
-	public int compareTo(Employee o) {
-		if(this.level != o.level) 
-			return level-o.level;
-		else if(this.experience != o.experience )
-			return experience-o.experience;
-		int genderComparable = this.gender.compareTo(o.gender);
+	public int compareTo(Employee ob) {
+		if(this.level != ob.level) 
+			return level-ob.level;
+		else if(this.experience != ob.experience )
+			return experience-ob.experience;
+		int genderComparable = this.gender.compareTo(ob.gender);
 		if(genderComparable != 0) return genderComparable;
-		
-//		else if(this.gender.equals("Male") )
-//			return 1;
-//		else if(this.gender.equals("Female") )
-//			return -1;
-//		else if(this.gender.equals("Other") )
-//			return 0;
+
 		else 
-			return (int) (salary-o.salary); 
+			return (int) (salary-ob.salary); 
 		
 	}
 

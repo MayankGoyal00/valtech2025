@@ -1,176 +1,239 @@
 package servlets;
  
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
- 
+
 import dao.Employee;
-import dao.EmployeeDAO;
-import dao.EmployeeDAOimpl;
+import dao.Employee.Gender;
 import jakarta.servlet.ServletContext;
  
-public class DeptDAOImpl implements DeptDAO  {
-	ServletContext sc;
+public class DeptDAOImpl implements DeptDAO {
+    private ServletContext sce;
+    private Properties p;
+    public DeptDAOImpl(ServletContext sce, Properties p) {
+        this.sce = sce;
+        this.p = p;
+    }
+    public ServletContext getSce() {
+        return sce;
+    }
+ 
+    public void setSce(ServletContext sce) {
+        this.sce = sce;
+    }
+ 
+    private Connection getConnection() throws SQLException {
+        System.out.println("DB URL: " + sce.getAttribute("db.url"));
+        System.out.println("DB Username: " + sce.getAttribute("db.username"));
+        System.out.println("DB Password: " + sce.getAttribute("db.password"));
+        return DriverManager.getConnection(
+            (String) sce.getAttribute("db.url"),
+            (String) sce.getAttribute("db.username"),
+            (String) sce.getAttribute("db.password")
+        );
+    }
+ 
+    @Override
+    public void save(Dept dept) {
+        String query = "INSERT INTO depts (deptid, deptname, deptlocation) VALUES (?, ?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, dept.getId());
+            stmt.setString(2, dept.getName());
+            stmt.setString(3, dept.getLocation());
+            stmt.executeUpdate();
+            System.out.println("Department Added: " + dept.getName());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    @Override
+    public void update(Dept dept) {
+        String query = "UPDATE depts SET deptname = ?, deptlocation = ? WHERE deptid = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, dept.getName());
+            stmt.setString(2, dept.getLocation());
+            stmt.setInt(3, dept.getId());
+            stmt.executeUpdate();
+            System.out.println("Department Updated: " + dept.getName());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    @Override
+    public void delete(int id) {
+        String query = "DELETE FROM depts WHERE deptid = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            System.out.println("Department Deleted: " + id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    @Override
+    public Dept getDept(int id) {
+        String query = "SELECT deptid, deptname, deptlocation FROM depts WHERE deptid = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Dept(
+                    rs.getInt("deptid"), 
+                    rs.getString("deptname"), 
+                    rs.getString("deptlocation")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+ 
+    @Override
+    public Set<Dept> getAll() {
+        Set<Dept> departments = new HashSet<>();
+        String query = "SELECT * FROM depts";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                departments.add(new Dept(rs.getInt("id"), rs.getString("name"), rs.getString("location")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return departments;
+    }
+ 
+    @Override
+    public Dept first() {
+        String query = "SELECT deptid, deptname, deptlocation FROM depts ORDER BY deptid ASC LIMIT 1";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                return new Dept(
+                    rs.getInt("deptid"), 
+                    rs.getString("deptname"), 
+                    rs.getString("deptlocation")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("No department found in database.");
+        return null;
+    }
+ 
+    @Override
+    public Dept last() {
+        String query = "SELECT deptid, deptname, deptlocation FROM depts ORDER BY deptid DESC LIMIT 1";
+        Dept dept = null;
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                dept = new Dept(rs.getInt("deptid"), rs.getString("deptname"), rs.getString("deptlocation"));
+                System.out.println("Last Department Found: ID=" + dept.getId() + ", Name=" + dept.getName());
+            } else {
+                System.out.println("No last department found in the database.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dept;
+    }
+ 
+    @Override
+    public Dept next(int id) {
+        String query = "SELECT deptid, deptname, deptlocation FROM depts WHERE deptid > ? ORDER BY deptid ASC LIMIT 1";
+        return getDeptFromQueryWithId(id, query);
+    }
+ 
+    @Override
+    public Dept previous(int id) {
+        String query = "SELECT deptid, deptname, deptlocation FROM depts WHERE deptid < ? ORDER BY deptid DESC LIMIT 1";
+        return getDeptFromQueryWithId(id, query);
+    }
+ 
+    @Override
+    public List<Employee> getEmployeesByDept(int deptId) {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employee WHERE deptid = ?";  
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, deptId);
+            System.out.println("Fetching employees for Department ID: " + deptId);
+            ResultSet rs = stmt.executeQuery();
 
-	public DeptDAOImpl(ServletContext sc) {
-		this.sc = sc;
-	}
- 
-	private Connection getConnection(ServletContext sc) throws SQLException {
-		System.out.println("dd----dd----"+sc);
-		String url = (String)sc.getAttribute("url");
-		String user = (String)sc.getAttribute("user");
-		String password = (String)sc.getAttribute("password");
-		return DriverManager.getConnection
-				(url,user,password);
-		}
+            while (rs.next()) {
+                Employee emp = new Employee(
+                	rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getInt("age"),
+                    rs.getFloat("salary"),
+                    rs.getInt("level"),
+                    rs.getInt("experience"),
+                    Employee.Gender.valueOf(rs.getString("gender").toUpperCase())
+                );
+                employees.add(emp);
+                System.out.println("Found Employee: " + emp.getName());
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if (employees.isEmpty()) {
+            System.out.println("No employees found for department ID: " + deptId);
+        }
+        return employees;
+    }
 
-	@Override
-	public void save(Dept d) {
-		try(Connection conn = getConnection(this. sc)){
-			PreparedStatement ps = conn.prepareStatement
-					("INSERT INTO DEPT (DEPT_ID,DEPT_NAME,LOCATION) VALUES(?,?,?)") ;
-			setValuesToPreparedStatement(d,ps);
-			int rowsAffected = ps.executeUpdate();
-			System.out.println("Rows Inserted + "+ rowsAffected);
-		} 
-		catch(Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-		private void  setValuesToPreparedStatement(Dept d, PreparedStatement ps) throws SQLException {
-			ps.setInt(1,d.getId());
-			ps.setString(2, d.getName());
-			ps.setString(3,d.getLocation());
- 
-		}
- 
-		@Override
-		public Dept first() {
-			DeptDAOImpl dept=new DeptDAOImpl(sc);
-			System.out.println(dept);
-		return dept.getAll().stream().min((a,b)->(a.getId()-b.getId())).get();
-		}
- 
-		@Override
-		public Dept last() {
-			DeptDAOImpl dept=new DeptDAOImpl(sc);
- 
-			return dept.getAll().stream().max((a,b)->(a.getId()-b.getId())).get();
-		}
- 
-		@Override
-		public Dept next(int id) {
-			DeptDAOImpl dept=new DeptDAOImpl(sc);
- 
-			if (id==dept.getAll().size()) {
-				return getDept(id);
-			}
-			return getDept(id+1);
-		}
- 
-		@Override
-		public Dept previous(int id) {
-			if (id ==1) {
-				return getDept(1);
-			} 
-			return getDept(id-1);
-		}
- 
-		@Override
-		public void update(Dept d) {
-			try(Connection conn = getConnection(this.sc)){
-				PreparedStatement ps = conn.prepareStatement("UPDATE DEPT SET DEPT_ID=?,DEPT_NAME=?,LOCATION=? WHERE ID = ? ");
-				setValuesToPreparedStatement(d, ps);
-				int rowsAffected = ps.executeUpdate();
-				System.out.println("Rows Updated = "+rowsAffected);
-				} catch(Exception ex) {
-				throw new RuntimeException(ex);
-	}
-}
-		@Override
-		public Dept getDept(int id) {
-			try(Connection conn = getConnection(this.sc)){
-				PreparedStatement ps = conn.prepareStatement("SELECT DEPT_ID,DEPT_NAME,LOCATION FROM DEPT WHERE DEPT_ID =?");
-				ps.setInt(1,id);
-				ResultSet rs = ps.executeQuery();
-				if(rs.next()) {
-					Dept d = populateDept(rs);
-					return d;
-				} else {
-					new RuntimeException("No Dept with id" + id + "Found");
-				}
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-			return null;
-		}
- 
-		@Override
-		public void delete(int id) {
-			try(Connection conn = getConnection(this.sc)){
-				PreparedStatement ps = conn.prepareStatement 
-						("DELETE FROM EMPLOYEE WHERE ID =?");
-				ps.setInt(1, id);
-				int rows = ps.executeUpdate();
-				System.out.println("Rows Deleted +" + rows);
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
-	}
-}
-		public List<Employee> ShowEmployeeById(int dept_id) {
-			List<Employee> emp = new ArrayList<Employee>();
-			try(Connection conn = getConnection(this.sc)){
-				PreparedStatement ps = conn.prepareStatement("SELECT ID,NAME,AGE,SALARY,GENDER,LEVEL,EXPERIENCE,DEPT_ID FROM EMPLOYEE WHERE DEPT_ID = ?");
-				System.out.println(ps);
-				ps.setInt(1, dept_id);
-				ResultSet rs = ps.executeQuery();
-				while(rs.next()) {
-					emp.add(populateEmp(rs));
-				}	
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-			System.out.println("----"+emp);
-			return emp;
-		}
-
-
-		private Employee populateEmp (ResultSet rs) throws SQLException {
-			return Employee.builder().id(rs.getLong(1)).name(rs.getString(2)).age(rs.getInt(3))
-					.gender(rs.getString(5)).salary(rs.getFloat(4)).experience(rs.getInt(7)).level(rs.getInt(6)).id(rs.getInt(8)).build();
-		}
- 
-		private Dept populateDept (ResultSet rs) throws SQLException {
-			return Dept.builder().id(rs.getInt(1)).name(rs.getString(2)).location(rs.getString(3)).build(); 
-		}
-
- 
-		@Override
-		public List<Dept> getAll() {
-			List<Dept> depts = new ArrayList<Dept>();
-			try(Connection conn = getConnection(this.sc)) {
-			PreparedStatement ps = conn.prepareStatement 
-					("SELECT DEPT_ID,DEPT_NAME,LOCATION FROM DEPT");
-			ResultSet rs = ps.executeQuery();
-			System.out.println(rs);
-			while(rs.next()) {
-				depts.add(populateDept(rs));
-				}
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
-			}
-			return depts;
-		}	
-
+    private Dept getDeptFromQuery(String query) {
+        Dept dept = null;
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                dept = new Dept(rs.getInt("id"), rs.getString("name"), rs.getString("location"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dept;
+    }
+    private Dept getDeptFromQueryWithId(int id, String query) {
+        Dept dept = null;
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                dept = new Dept(rs.getInt("deptid"), rs.getString("deptname"), rs.getString("deptlocation"));
+                System.out.println("Navigated to Department: " + dept.getName());
+            } else {
+                System.out.println("No next/previous department found for ID: " + id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dept;
+    }
 }

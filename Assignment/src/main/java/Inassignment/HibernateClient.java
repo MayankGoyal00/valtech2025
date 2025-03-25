@@ -17,82 +17,95 @@ public class HibernateClient {
     	OrderDAO oh= ctx.getBean(OrderDAOImpl.class);
     	ItemDAO idao= ctx.getBean(ItemDAOImpl.class);
     	
+//    	ItemDAOImpl is=ctx.getBean(ItemDAOImpl.class);
+//    	OrderServiceImpl os=ctx.getBean(OrderServiceImpl.class);
+    	
 
 //    	csh.delete(1l);
 //   	csh.delete(2l);
 //    	csh.delete(3l);
     	
 
-    	
-    	
-    	
- //   	Item i = new Item("bottle","sports",10,2,20);
+//    	Item i4 = new Item("apple","fruit",10,2,20);
+//   	idao.save(i4);
 //    	Item i=new Item();
 //    	i.setName("Ball");
 //    	i.setDescription("Tennis");
 //    	i.setCurrentQuantity(20);
 //    	i.setReorderQuantity(10);
 //    	i.setMaxQuantity(40);
- //   	idao.save(i);
+ //   	idao.save(i4);
     	
-    	Item i2=new Item();
-    	i2.setName("gloves");
-    	i2.setDescription("Golf");
-    	i2.setCurrentQuantity(30);
-    	i2.setReorderQuantity(20);
-    	i2.setMaxQuantity(50);
+//    	Item i2=new Item();
+//    	i2.setName("gloves");
+//    	i2.setDescription("Golf");
+//    	i2.setCurrentQuantity(30);
+//    	i2.setReorderQuantity(20);
+//    	i2.setMaxQuantity(50);
  //   	idao.save(i2);
     	
-//    	Item i3=new Item();
-//    	i3.setName("ball");
-//    	i3.setDescription("football");
-//    	i3.setCurrentQuantity(150);
-//    	i3.setReorderQuantity(50);
-//    	i3.setMaxQuantity(300);
+    	Item i3=new Item();
+    	i3.setName("ball");
+    	i3.setDescription("football");
+    	i3.setCurrentQuantity(150);
+    	i3.setReorderQuantity(50);
+    	i3.setMaxQuantity(300);
 //    	idao.save(i3);
     	
     	
     	
+    	Customer c7=new Customer("Abdul",20,"India","USA");
+    	csh.save(c7);
+    	
+//    	Customer c1=new Customer("Mayank",23,"Gujarat","Rajasthan");
+//    	csh.save(c1);
+//    	Customer c2=new Customer("Mitul",22,"Kolkata","Gujarat");
+// //   	csh.save(c2);
+//    	Customer c3=new Customer("Abishek",20,"Punjab","Uttrakhand");
+////    	csh.save(c3);
+//    	Customer c4=new Customer("Rahul",32,"Himchal","Rajasthan");
+////    	csh.save(c4);
+//    	Customer c5=new Customer("Virat",30,"Delhi","Haryana");
+////    	csh.save(c5);
+//    	Customer c6=new Customer("Abhi",40,"Punjab","Punjab");
+////    	csh.save(c6);
+    	
+    	
+    	
+    	
+    	
+//    	Orders ob= new Orders();
+//    	ob.addOrderItems(new OrderItem(i2,ob,90));
+//    	ob.setCustomer(c3);
+//    	ob.setOrderStatus("PACKed");
+//    	oh.save(ob);
+    	
+    	
+    	
+    	
+//    	Orders ob1= new Orders();
+//    	ob1.addOrderItems(new OrderItem(i3,ob1,10));
+//    	oh.save(ob1);
+    	
+//
+    	
+//    	Orders ob2= new Orders();
+//    	ob2.addOrderItems(new OrderItem(i2,ob,900));
+//    	oh.save(ob2);
     	
     	
  //   	Customer c1=new Customer("Mayank",23,"Gujarat","Rajasthan");
  //   	csh.save(c1);
  //   	Customer c2=new Customer("Mitul",22,"Kolkata","Gujarat");
  //   	csh.save(c2);
-    	Customer c3=new Customer("Abishek",20,"Punjab","Uttrakhand");
-    	csh.save(c3);
+ //   	Customer c3=new Customer("Abishek",20,"Punjab","Uttrakhand");
+//    	csh.save(c3);
 //    	Customer c4=new Customer("Rahul",32,"Himchal","Rajasthan");
 //    	csh.save(c4);
-//    	Customer c5=new Customer("Virat",30,"Delhi","Haryana");
+ //  	Customer c5=new Customer("Virat",30,"Delhi","Haryana");
 //    	csh.save(c5);
-    	
-    	
-    	
-    	
-    	
-    	
-    	Orders ob= new Orders();
-    	ob.addOrderItems(new OrderItem(i2,ob,90));
-    	ob.setCustomer(c3);
-    	ob.setOrderStatus("PACKed");
-    	oh.save(ob);
-    	
-    	
-    	
-   	
-    	
-//    	Orders ob= new Orders();
-//    	ob.addOrderItems(new OrderItem(i3,ob,990));
-//    	oh.save(ob);
-    	
-//
-    	
-    	Orders ob2= new Orders();
-    	ob2.addOrderItems(new OrderItem(i2,ob,900));
-    	oh.save(ob2);
-    	
-    	
-    	
+ //   	Customer c6=new Customer("Abhi",40,"Punjab","Punjab");
+//    	csh.save(c6);
     	
     	
     	

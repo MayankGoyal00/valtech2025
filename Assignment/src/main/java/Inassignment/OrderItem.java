@@ -29,7 +29,7 @@ public class OrderItem {
     private int quantity;
     public OrderItem() {}
 
-    public OrderItem(Item item, Orders order, int quantity) {
+    public OrderItem(Item item,Orders order,  int quantity) {
         this.item = item;
         this.order = order;
         this.quantity = quantity;
@@ -67,5 +67,8 @@ public class OrderItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+
+
 }
 

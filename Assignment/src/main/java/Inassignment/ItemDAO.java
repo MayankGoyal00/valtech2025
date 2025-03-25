@@ -9,6 +9,7 @@ public interface ItemDAO {
     void delete(Long itemId);   
     Item get(Long itemId);  
     Set<Item> findAll();
+//	void updateItem(int itemId, int newQuantity);
    
 }
 

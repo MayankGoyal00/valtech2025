@@ -42,7 +42,7 @@ public class OrderItemDAOImpl implements OrderItemDAO {
     
 	@Override
 	public List<OrderItem> getAll() {
-		return new HibernateTemplate(sessionFactory).find("OrderItem oi");
+		return new HibernateTemplate(sessionFactory).find("from OrderItem oi");
 	
 	}
 

@@ -52,7 +52,7 @@ public class DeptDAOImpl implements DeptDAO {
             stmt.setString(2, dept.getName());
             stmt.setString(3, dept.getLocation());
             stmt.executeUpdate();
-            System.out.println("Department Added: " + dept.getName());
+            System.out.println("Department Added " + dept.getName());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class DeptDAOImpl implements DeptDAO {
             stmt.setString(2, dept.getLocation());
             stmt.setInt(3, dept.getId());
             stmt.executeUpdate();
-            System.out.println("Department Updated: " + dept.getName());
+            System.out.println("Department Updated" + dept.getName());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -80,7 +80,7 @@ public class DeptDAOImpl implements DeptDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
-            System.out.println("Department Deleted: " + id);
+            System.out.println("Department Deleted " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,7 +98,7 @@ public class DeptDAOImpl implements DeptDAO {
                     rs.getInt("deptid"), 
                     rs.getString("deptname"), 
                     rs.getString("deptlocation")
-                );
+                ); 
             }
         } catch (SQLException e) {
             e.printStackTrace();

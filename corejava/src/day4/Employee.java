@@ -15,9 +15,8 @@ public class Employee implements Comparable<Employee>{
 	private float salary;
 	private int level;
 	private int experience;
-	private Gender gender;		//enum 
+	private Gender gender;		//enum hai yae 
 	public static List<Employee> allEmp = new ArrayList<Employee>();
-	public static Map<Gender,List<Employee>> getEmployeeMap = new HashMap<Gender,List<Employee>>();
 	 
 	public Employee() {
 	}
@@ -192,4 +191,5 @@ public class Employee implements Comparable<Employee>{
 		System.out.println(ob.toString());
 		
 	}
+	
 }

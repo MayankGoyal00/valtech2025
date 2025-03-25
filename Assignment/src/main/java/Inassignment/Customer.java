@@ -15,8 +15,8 @@ import java.util.Set;
 @Entity
 @Table(name = "customer")
 public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerseq")
+	
+    @Id@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerseq")
     @SequenceGenerator(name = "customerseq", sequenceName = "customer_seq", allocationSize = 1)
     private Long id;
 
@@ -27,7 +27,6 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Orders> orders;
-
 
     public Customer() {}
 

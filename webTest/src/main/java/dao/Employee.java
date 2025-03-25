@@ -216,7 +216,6 @@ public class Employee implements Comparable<Employee>{
 		
 	}
 
-	//Gender.valueOf(rs.getString(4));
 	
 	
 	

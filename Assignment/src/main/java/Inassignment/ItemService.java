@@ -9,6 +9,9 @@ public interface ItemService {
     void delete(Long itemId);   
     Item get(Long itemId);  
     Set<Item> findAll();
+	
+//	void resetItem(Item item);
+//	void updateItem(int itemid, int newQuantity);
    
 }
 

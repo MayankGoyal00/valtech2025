@@ -16,7 +16,7 @@ class EmployeeTest {
     private EmployeeService employeeService;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         employeeService = new EmployeeService();
 
         Employee.builder().id(1).name("abc").age(10).salary(1000).level(1).experience(1).gender("MALE").build();
@@ -29,27 +29,32 @@ class EmployeeTest {
         Employee.builder().id(8).name("abcdefgh").age(80).salary(8000).level(8).experience(8).gender("FEMALE").build();
         Employee.builder().id(9).name("abcdefghi").age(90).salary(9000).level(9).experience(9).gender("OTHER").build();
         Employee.builder().id(10).name("abcdefghij").age(100).salary(10000).level(10).experience(10).gender("MALE").build();
+        
+        employeeService.printSortedEmployees();
+        
     }
 
     @Test
     void testEmployeeService() {
-       // employeeService.printSortedEmployees();
 
-        double totalSalaryLevel1 = employeeService.getEmployeeByLevel(1);
-        System.out.println("Total Salary Level 1=" + totalSalaryLevel1);
-        assertEquals(1000.0,totalSalaryLevel1,.1);
+    	
+        double totalSalaryLevel = employeeService.getEmployeeByLevel(1);
+        System.out.println("Total Salary Level =" + totalSalaryLevel);
+        assertEquals(1000,totalSalaryLevel,.1);
 
         double totalSalaryFemale = employeeService.getEmployeeByGender(Gender.FEMALE);
         System.out.println("Total Salary FEMALE=" + totalSalaryFemale);
-        assertEquals(13000.0,totalSalaryFemale,.1);
+        assertEquals(13000,totalSalaryFemale,.1);
 
         String employeeNames =employeeService.getEmployeeByName("mayank");
         System.out.println("Employee with name 'mayank'" + employeeNames);
         assertEquals(employeeNames,(new Employee(2l,"mayank",20,2000,2,2,Gender.MALE)).toString());
 
-        double totalSalaryMaleLevel4 = employeeService.getEmployeeByGenderAndLevel(4, Gender.MALE);
-        System.out.println("Total Salary forr MALE and Level 4 =" + totalSalaryMaleLevel4);
-        assertEquals(4000.0,totalSalaryMaleLevel4,.1);
+        double totalSalaryMaleLevel = employeeService.getEmployeeByGenderAndLevel(4, Gender.MALE);
+        System.out.println("Total Salary forr MALE and Level  =" + totalSalaryMaleLevel);
+        assertEquals(4000,totalSalaryMaleLevel,.1);
        
     }
 }
+
+

@@ -20,7 +20,7 @@ public class DeptServlet extends HttpServlet {
     private DeptDAO deptDAO;
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init(config);  // Ensures ServletConfig is initialized properly
+        super.init(config); 
         ServletContext context = getServletContext();
         Properties properties = new Properties();
         try (InputStream input = context.getResourceAsStream("/WEB-INF/classes/db.properties")) {

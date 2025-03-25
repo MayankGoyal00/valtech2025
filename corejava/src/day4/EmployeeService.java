@@ -6,18 +6,19 @@ import java.util.stream.Collectors;
 
 public class EmployeeService {
 
+	
     public double getEmployeeByLevel(int level) {
         return Employee.allEmp.stream()
                 .filter(emp -> emp.getLevel() == level)
                 .mapToDouble(emp->emp.getSalary())
-                .sum();
+                .sum(); 
     }
 
     public double getEmployeeByGender(Employee.Gender gender) {
         return Employee.allEmp.stream()
-                .filter(emp -> emp.getGender() == gender)
+                .filter(emp -> emp.getGender() == gender) 
                 .mapToDouble(emp->emp.getSalary())
-                .sum();
+                .sum(); 
     }
 
     public String getEmployeeByName(String name) {
@@ -38,77 +39,14 @@ public class EmployeeService {
         return Employee.allEmp.stream()
                 .collect(Collectors.groupingBy(emp->emp.getGender()));
     }
+    
+    public void printSortedEmployees() {
+      Employee.allEmp.stream()
+              .sorted()
+              .forEach(emp->System.out.println(emp));
+    }
 
    
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//public void printSortedEmployees() {
-//    Employee.allEmp.stream()
-//            .sorted()
-//            .forEach(emp->System.out.println(emp));
-//}

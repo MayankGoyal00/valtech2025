@@ -21,8 +21,7 @@ public class SubscriptionController {
 	
 	@GetMapping("/{id}")
 	public SubscriptionVO getSubscriptionById(@PathVariable("subId") long subId) {
-		return subService.getSubscriptionById(subId);
-		
+		return subService.getSubscriptionById(subId);	
 	}
 	
 	

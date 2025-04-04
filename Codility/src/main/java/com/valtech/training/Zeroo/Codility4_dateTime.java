@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class Codility4 {
+public class Codility4_dateTime {
 	
 	public static void main(String []args) {
 		Scanner sc= new Scanner(System.in);
